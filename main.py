@@ -45,7 +45,7 @@ class ItemEnterListener(EventListener):
         try:
             os.system(teminal.format(command=command))
         except Exception as e:
-            with open(os.environ['HOME'] + '.cache/ulauncher-run-in-terminal.err.log', 'w') as f:
+            with open(os.environ['HOME'] + '/.cache/ulauncher-run-in-terminal.err.log', 'w') as f:
                 f.write(e)
         return HideWindowAction()
 
