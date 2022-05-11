@@ -8,42 +8,47 @@ from ulauncher.api.shared.action.OpenAction import OpenAction
 from ulauncher.api.shared.action.ExtensionCustomAction import ExtensionCustomAction
 import os
 
-class Ext_zh0per(Extension):
+
+class RunInTerminal(Extension):
 
     def __init__(self):
         super().__init__()
         self.subscribe(KeywordQueryEvent, KeywordListener())
         self.subscribe(ItemEnterEvent, ItemEnterListener())
 
+
 class KeywordListener(EventListener):
 
     def on_event(self, event, extension):
         items = []
         data = {'command': event.get_argument()}
-        items.append(ExtensionResultItem(
-            icon='images/run.png',
-            name='Execute',
-            description=data['command'],
-            on_enter=ExtensionCustomAction(data) ))
+        items.append(
+            ExtensionResultItem(
+                icon='images/run.png',
+                name='Execute',
+                description=data['command'],
+                on_enter=ExtensionCustomAction(data)
+            )
+        )
 
         return RenderResultListAction(items)
+
 
 class ItemEnterListener(EventListener):
 
     def on_event(self, event, extension):
 
         data = event.get_data()
-        
+
         command = data['command']
         terminal = extension.preferences['terminal']
         try:
             os.system(teminal.format(command=command))
         except Exception as e:
-            with open('/home/zh0per/Desktop/out.txt', 'w') as f:
+            with open(os.environ['HOME'] + '.cache/ulauncher-run-in-terminal.err.log', 'w') as f:
                 f.write(e)
         return HideWindowAction()
 
 
 if __name__ == '__main__':
-    Ext_zh0per().run()
-
+    RunInTerminal().run()
